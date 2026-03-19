@@ -25,7 +25,7 @@
     <extensions defaultExtensionNs="com.intellij">
         <projectService serviceImplementation="ke.don.faah.data.JsonDb"/>
         <!-- Factory class -->
-        <toolWindow factoryClass="ke.don.faah.data.FaahToolWindowFactory" id="Faah" anchor="right" />
+        <toolWindow factoryClass="ke.don.faah.ui.FaahToolWindowFactory" id="Faah" anchor="right" />
     </extensions>
 
     <actions>

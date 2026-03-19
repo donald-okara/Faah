@@ -7,11 +7,11 @@ data class FaahEntry(
     val id: String,
     val title: String,
     val description: String,
-    val file: String,
-    val line: Int,
-    val author: String,
-    val createdAt: Long,
-    val status: Status
+//    val file: String,
+//    val line: Int,
+//    val author: String,
+//    val createdAt: Long,
+//    val status: Status
 )
 
 @Serializable
