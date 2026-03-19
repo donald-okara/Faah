@@ -2,9 +2,10 @@ plugins {
     id("java")
     id("org.jetbrains.kotlin.jvm") version "2.1.20"
     id("org.jetbrains.intellij.platform") version "2.10.2"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.1.20"
 }
 
-group = "com.example"
+group = "ke.don"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -20,6 +21,8 @@ dependencies {
         androidStudio("2024.2.1.11")
         testFramework(org.jetbrains.intellij.platform.gradle.TestFrameworkType.Platform)
     }
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.8.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
 }
 
 intellijPlatform {

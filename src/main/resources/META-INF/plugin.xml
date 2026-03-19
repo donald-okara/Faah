@@ -23,6 +23,9 @@
     <depends>com.intellij.modules.platform</depends>
     <!-- Extensions defined by the plugin. -->
     <extensions defaultExtensionNs="com.intellij">
+        <projectService serviceImplementation="ke.don.faah.data.JsonDb"/>
+        <!-- Factory class -->
+        <toolWindow factoryClass="ke.don.faah.data.FaahToolWindowFactory" id="Faah" anchor="right" />
     </extensions>
 
     <actions>
@@ -37,5 +40,4 @@
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </group>
     </actions>
-
 </idea-plugin>
