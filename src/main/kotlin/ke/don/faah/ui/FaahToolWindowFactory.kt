@@ -1,5 +1,6 @@
 package ke.don.faah.ui
 
+import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
 import com.intellij.openapi.wm.ToolWindowFactory
@@ -9,6 +10,7 @@ import ke.don.faah.data.JsonDb
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
 import java.awt.BorderLayout
 import javax.swing.JLabel
 import javax.swing.JPanel
@@ -29,7 +31,9 @@ class FaahToolWindowFactory : ToolWindowFactory {
             add(AddEntryPanel(scope, faahService), BorderLayout.NORTH)
             add(EntryListPanel(scope, faahService), BorderLayout.CENTER)
         }
-        val content = ContentFactory.getInstance().createContent(panel, "Faah", false)
+        val content = contentFactory.createContent(panel, "Faah", false).apply {
+            setDisposer(Disposable { scope.cancel() })
+        }
         toolWindow.contentManager.addContent(content)
 
         // TEMP: test your file logic
