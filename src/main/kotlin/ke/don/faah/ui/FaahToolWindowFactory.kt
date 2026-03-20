@@ -1,5 +1,6 @@
 package ke.don.faah.ui
 
+import androidx.compose.ui.awt.ComposePanel
 import com.intellij.openapi.Disposable
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.wm.ToolWindow
@@ -11,9 +12,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import java.awt.BorderLayout
-import javax.swing.JLabel
-import javax.swing.JPanel
 
 class FaahToolWindowFactory : ToolWindowFactory {
     override fun createToolWindowContent(
@@ -27,11 +25,13 @@ class FaahToolWindowFactory : ToolWindowFactory {
 
         val contentFactory = ContentFactory.getInstance()
 
-        val panel = JPanel(BorderLayout()).apply {
-            add(AddEntryPanel(scope, faahService), BorderLayout.NORTH)
-            add(EntryListPanel(scope, faahService), BorderLayout.CENTER)
+        val composePanel = ComposePanel().apply {
+            setContent {
+                FaahComposeView(faahService)
+            }
         }
-        val content = contentFactory.createContent(panel, "Faah", false).apply {
+
+        val content = contentFactory.createContent(composePanel, "Faah", false).apply {
             setDisposer(Disposable { scope.cancel() })
         }
         toolWindow.contentManager.addContent(content)

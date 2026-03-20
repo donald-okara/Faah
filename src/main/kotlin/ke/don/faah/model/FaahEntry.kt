@@ -1,17 +1,21 @@
 package ke.don.faah.model
     
+import com.jetbrains.rd.util.UUID
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class FaahEntry(
-    val id: String,
     val title: String,
     val description: String,
-//    val file: String,
-//    val line: Int,
-//    val author: String,
-//    val createdAt: Long,
-//    val status: Status
+
+    val id: String = UUID.randomUUID().toString(),
+    val file: String = "",
+    val line: Int = 0,
+    val author: String = "",
+    val createdAt: Long = Clock.System.now().toEpochMilliseconds(),
+    val status: Status = Status.OPEN
 )
 
 @Serializable
