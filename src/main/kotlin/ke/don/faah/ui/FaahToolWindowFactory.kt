@@ -35,9 +35,5 @@ class FaahToolWindowFactory : ToolWindowFactory {
             setDisposer(Disposable { scope.cancel() })
         }
         toolWindow.contentManager.addContent(content)
-
-        // TEMP: test your file logic
-        val items = faahService.getAll()
-        println(items)
     }
 }

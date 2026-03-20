@@ -1,9 +1,5 @@
 package ke.don.faah.data
 
-import com.intellij.openapi.components.Service
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
-import java.io.File
 import com.intellij.openapi.project.Project
 import ke.don.faah.model.FaahEntry
 import kotlinx.coroutines.Dispatchers
@@ -11,16 +7,28 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.*
 import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.*
+import java.io.File
 
 class JsonDb(private val project: Project) {
 
     private val file: File by lazy {
-        val dir = File(project.basePath, ".faah")
+        val basePath = project.basePath
+            ?: throw IllegalStateException("Project base path is null")
+
+
+        val dir = File(basePath, ".faah")
         dir.mkdirs()
         File(dir, "tech_debt.json")
     }
+
+    private val writeMutex = Mutex()
 
     private val json = Json { prettyPrint = true; encodeDefaults = true }
 
@@ -43,10 +51,12 @@ class JsonDb(private val project: Project) {
 
 
     suspend fun save(entry: FaahEntry) {
-        val current = _entries.value.toMutableList()
-        val index = current.indexOfFirst { it.id == entry.id }
-        if (index != -1) current[index] = entry else current.add(entry)
-        persist(current)
+        writeMutex.withLock {
+            val current = _entries.value.toMutableList()
+            val index = current.indexOfFirst { it.id == entry.id }
+            if (index != -1) current[index] = entry else current.add(entry)
+            persist(current)
+        }
     }
 
     suspend fun saveAll(entries: List<FaahEntry>) {
